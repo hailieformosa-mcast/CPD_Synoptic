@@ -10,7 +10,15 @@ class FirebaseService {
   static final FirebaseService instance = FirebaseService._();
 
   Future<void> initialize() async {
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp();
+    } catch (e) {
+      // If platform-specific Firebase options are not provided (e.g. web not configured),
+      // don't crash the app—analytics will be disabled until proper config is added.
+      // Logged for debugging.
+      // ignore: avoid_print
+      print('Firebase.initializeApp() skipped or failed: $e');
+    }
   }
 
   FirebaseAnalytics get analytics => FirebaseAnalytics.instance;
@@ -24,5 +32,13 @@ class FirebaseService {
 
   Future<void> logAddItem(String itemName) async {
     await analytics.logEvent(name: 'add_item', parameters: {'item': itemName});
+  }
+
+  Future<void> logRemoveItem(String itemName) async {
+    await analytics.logEvent(name: 'remove_item', parameters: {'item': itemName});
+  }
+
+  Future<void> logViewMap() async {
+    await analytics.logEvent(name: 'view_map');
   }
 }
