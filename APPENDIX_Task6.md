@@ -54,12 +54,20 @@ FirebaseAnalytics.instance.logEvent(name: 'move_to_cart', parameters: {'item': i
 - Firebase Console screenshot showing example events and a short list of tracked events.
 - `MAINTENANCE.md` contents (three realistic updates with effort estimation and compatibility notes).
 
-5) Quick commands
-- Create a branch for each major feature and commit frequently:
-```bash
-git checkout -b feat/hive-persistence
-git add .
-git commit -m "Add Hive persistence for shopping lists"
+4) What to include in your report
+- Repository link and a screenshot of the commit history showing >=8 commits.
+- A copy of `.github/workflows/flutter_ci.yml` (or the file path) and one-sentence explanation.
+- Firebase Console screenshot showing example events and a short list of tracked events.
+- `MAINTENANCE.md` contents (three realistic updates with effort estimation and compatibility notes).
+
+## Developer Diary (summary)
+
+- 2026-04-20: Cleaned repository history and removed large build artifacts from tracking. Created `backup-main` branch before performing cleanup to preserve the full repository state.
+- 2026-04-20: Added `.gitignore` to prevent build outputs and IDE files being tracked in future commits.
+- 2026-04-20: Documented development steps and Task 6 deliverables in the appendix and `COMMIT_LOG.md`.
+
+These entries document the maintenance and submission steps performed on the project and can be referenced in the Task 6 appendix.
+
 ```
 - Push to remote (after adding remote):
 ```bash
