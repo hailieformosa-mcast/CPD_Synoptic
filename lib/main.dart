@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'notifications.dart';
+import 'firebase_setup.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseService.instance.initialize();
   await notificationService.initialize();
   await Hive.initFlutter();
   final box = await Hive.openBox('shoppingBox');
@@ -62,6 +64,9 @@ class ShoppingListProvider with ChangeNotifier {
   void addItem(String name, String quantity) {
     _toGetItems.add({'name': name, 'quantity': quantity});
     _persist();
+    try {
+      FirebaseService.instance.logAddItem(name);
+    } catch (_) {}
     notifyListeners();
   }
 
@@ -81,6 +86,9 @@ class ShoppingListProvider with ChangeNotifier {
     // trigger a local notification to inform the user
     try {
       notificationService.showNotification('Added to cart', '${item['name']} added to cart');
+    } catch (_) {}
+    try {
+      FirebaseService.instance.logMoveToCart(item['name'] ?? '', item['quantity'] ?? '');
     } catch (_) {}
     notifyListeners();
   }
